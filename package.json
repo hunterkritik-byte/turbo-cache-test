@@ -3,9 +3,6 @@
   "private": true,
   "packageManager": "npm@10.9.2",
   "devDependencies": {
-    "turbo": "latest"
-  },
-  "scripts": {
-    "build": "turbo run build"
+    "turbo": "2.11.7"
   }
 }
