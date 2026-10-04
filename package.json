@@ -1,0 +1,11 @@
+{
+  "name": "turbo-cache-test",
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "scripts": {
+    "build": "turbo run build"
+  }
+}

@@ -1,0 +1,53 @@
+name: Turborepo cache-hash test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm install
+
+      - name: Turbo version
+        run: npx turbo --version
+
+      - name: Control A
+        env:
+          TEST_SECRET: AAA
+        run: |
+          rm -rf apps/test/dist
+          npx turbo run build --dry=json > turbo-a.json
+          npx turbo run build
+          echo "=== A output ==="
+          cat apps/test/dist/output.txt
+          echo "=== A hash ==="
+          grep -o '"hash":"[^"]*"' turbo-a.json || true
+
+      - name: Control B
+        env:
+          TEST_SECRET: BBB
+        run: |
+          rm -rf apps/test/dist
+          npx turbo run build --dry=json > turbo-b.json
+          npx turbo run build
+          echo "=== B output ==="
+          cat apps/test/dist/output.txt
+          echo "=== B hash ==="
+          grep -o '"hash":"[^"]*"' turbo-b.json || true
+
+      - name: Compare
+        run: |
+          echo "=== A ==="
+          cat turbo-a.json
+          echo "=== B ==="
+          cat turbo-b.json
